@@ -1,0 +1,21 @@
+{
+  "Add image IBG": {
+    "prefix": ["ibg"],
+    "body": [
+      "<div className=\"${1:имя блока}__image-ibg\"><img src={} alt=\"\"></div>"
+    ],
+    "description": "Добавляет объект с картинкой и классом IBG"
+  },
+  "Add Link with image IBG": {
+    "prefix": ["ibga"],
+    "body": [
+      "<a href=\"\" className=\"${1:имя блока}__image-ibg\"><img src={} alt=\"\"></a>"
+    ],
+    "description": "Добавляет ссылку с картинкой и классом IBG"
+  },
+  "Add container": {
+    "prefix": ["cnt"],
+    "body": "<div className=\"${1:имя блока}__container\">\n\t$2\n</div>",
+    "description": "Добавляет ограничивающий контейнер"
+  }
+}
