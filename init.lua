@@ -42,18 +42,19 @@ local config = {
   options = {
     opt = {
       -- set to true or false etc.
-      relativenumber = true, -- sets vim.opt.relativenumber
+      relativenumber = true, -- sets vim.ohout set scroll=0, the scrpt.relativenumber
       shell = "zsh",
       expandtab = true,
       smartindent = true,
+      smarttab = true,
       number = true, -- sets vim.opt.number
       spell = false, -- sets vim.opt.spell
       signcolumn = "auto", -- sets vim.opt.signcolumn to auto
       wrap = false, -- sets vim.opt.wrap
       cmdheight = 1,
-      tabstop = 4,
-      softtabstop = 4,
-      shiftwidth = 4,
+      -- tabstop = 2,
+      -- softtabstop = 2,
+      -- shiftwidth = 2,
     },
     g = {
       mapleader = " ", -- sets vim.g.mapleader
@@ -306,13 +307,11 @@ local config = {
         end,
       },
 
-      ["sainnhe/everforest"] = {},
       ["kvrohit/mellow.nvim"] = {},
       ["catppuccin/nvim"] = {
         as = "catppuccin",
         config = function() vim.g.catppuccin_flavour = "mocha" end,
       },
-      ["sainnhe/gruvbox-material"] = {},
     },
     -- All other entries override the require("<key>").setup({...}) call for default plugins
     ["null-ls"] = function(config) -- overrides `require("null-ls").setup(config)`
