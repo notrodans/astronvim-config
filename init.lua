@@ -26,7 +26,7 @@ local config = {
   },
 
   -- Set colorscheme to use
-  colorscheme = "catppuccin",
+  colorscheme = "mellow",
 
   -- Add highlight groups in any theme
   highlights = {
@@ -50,9 +50,10 @@ local config = {
       spell = false, -- sets vim.opt.spell
       signcolumn = "auto", -- sets vim.opt.signcolumn to auto
       wrap = false, -- sets vim.opt.wrap
-      -- tabstop = 4,
-      -- softtabstop = 4,
-      -- shiftwidth = 4,
+      cmdheight = 1,
+      tabstop = 4,
+      softtabstop = 4,
+      shiftwidth = 4,
     },
     g = {
       mapleader = " ", -- sets vim.g.mapleader
@@ -91,10 +92,10 @@ local config = {
   -- Default theme configuration
   default_theme = {
     -- Modify the color palette for the default theme
-    colors = {
-      fg = "#CDD6F4",
-      bg = "#1E1E2E",
-    },
+    -- colors = {
+    --   fg = "#CDD6F4",
+    --   bg = "#1E1E2E",
+    -- },
     highlights = function(hl) -- or a function that returns a new table of colors to set
       local C = require "default_theme.colors"
 
@@ -134,6 +135,7 @@ local config = {
   diagnostics = {
     virtual_text = true,
     underline = true,
+    signs = true,
   },
 
   -- Extend LSP configuration
@@ -215,6 +217,12 @@ local config = {
 
   -- Configure plugins
   plugins = {
+    heirline = function(config)
+      -- the first item is the statusline
+      -- the second item is the winbar
+      config[2] = nil
+      return config
+    end,
     init = {
       -- Completion engine
       ["hrsh7th/nvim-cmp"] = {
@@ -299,7 +307,9 @@ local config = {
       },
 
       ["sainnhe/everforest"] = {},
+      ["kvrohit/mellow.nvim"] = {},
       ["catppuccin/nvim"] = {
+        as = "catppuccin",
         config = function() vim.g.catppuccin_flavour = "mocha" end,
       },
       ["sainnhe/gruvbox-material"] = {},
@@ -316,6 +326,7 @@ local config = {
         null_ls.builtins.formatting.stylelint,
         -- Diagnostics
         null_ls.builtins.diagnostics.stylelint,
+        null_ls.builtins.diagnostics.eslint_d,
       }
       return config -- return final config table to use in require("null-ls").setup(config)
     end,
