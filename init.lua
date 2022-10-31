@@ -43,7 +43,6 @@ local config = {
     opt = {
       -- set to true or false etc.
       relativenumber = true, -- sets vim.ohout set scroll=0, the scrpt.relativenumber
-      shell = "zsh",
       expandtab = true,
       smartindent = true,
       smarttab = true,
@@ -52,6 +51,7 @@ local config = {
       signcolumn = "auto", -- sets vim.opt.signcolumn to auto
       wrap = false, -- sets vim.opt.wrap
       cmdheight = 1,
+      completeopt = { "menu", "menuone", "noselect" },
       -- tabstop = 2,
       -- softtabstop = 2,
       -- shiftwidth = 2,
@@ -143,7 +143,11 @@ local config = {
   lsp = {
     -- enable servers that you already have installed without mason
     servers = {
-      -- "pyright"
+      "tsserver",
+      "stylelint_lsp",
+    },
+    skip_setup = {
+      "stylelint_lsp",
     },
     formatting = {
       format_on_save = {
@@ -156,17 +160,19 @@ local config = {
         },
       },
       -- disabled = { -- disable formatting capabilities for the listed clients
-      -- "sumneko_lua",
       -- },
       -- filter = function(client) -- fully override the default formatting function
       --   return true
       -- end
+      -- timeout_ms = 1000, -- default format timeout
       async = true,
     },
     -- easily add or disable built in mappings added during LSP attaching
     mappings = {
       n = {
         -- ["<leader>lf"] = false -- disable formatting keymap
+        ["[d"] = false,
+        ["]d"] = false,
       },
     },
     -- add to the global LSP on_attach function
@@ -181,17 +187,12 @@ local config = {
     -- Add overrides for LSP server settings, the keys are the name of the server
     ["server-settings"] = {
       -- example for addings schemas to yamlls
-      -- yamlls = { -- override table for require("lspconfig").yamlls.setup({...})
-      --   settings = {
-      --     yaml = {
-      --       schemas = {
-      --         ["http://json.schemastore.org/github-workflow"] = ".github/workflows/*.{yml,yaml}",
-      --         ["http://json.schemastore.org/github-action"] = ".github/action.{yml,yaml}",
-      --         ["http://json.schemastore.org/ansible-stable-2.9"] = "roles/tasks/*.{yml,yaml}",
-      --       },
-      --     },
-      --   },
-      -- },
+      stylelint_lsp = { -- override table for require("lspconfig").stylelint_lsp.setup({...})
+        stylelintplus = {
+          autoFixOnFormat = true,
+          filetypes = { "css", "sass", "scss", "less" },
+        },
+      },
     },
   },
 
@@ -213,6 +214,14 @@ local config = {
         "<Cmd>Lspsaga lsp_finder<CR>",
         desc = "lspsaga lsp finder",
       },
+      ["[d"] = {
+        "<Cmd>Lspsaga diagnostic_jump_prev<CR>",
+        desc = "lspsaga lsp finder",
+      },
+      ["]d"] = {
+        "<Cmd>Lspsaga diagnostic_jump_next<CR>",
+        desc = "lspsaga lsp finder",
+      },
     },
   },
 
@@ -224,22 +233,46 @@ local config = {
       config[2] = nil
       return config
     end,
+    lspkind = function(config)
+      config.mode = "symbol_text"
+      config.before = function(entry, vim_item)
+        vim_item.menu = entry.completion_item.detail
+        return vim_item
+      end
+      config.symbol_map = {
+        Text = "",
+        Method = "",
+        Function = "",
+        Constructor = "",
+        Field = "ﰠ",
+        Variable = "",
+        Class = "ﴯ",
+        Interface = "",
+        Module = "",
+        Property = "ﰠ",
+        Unit = "塞",
+        Value = "",
+        Enum = "",
+        Keyword = "",
+        Snippet = "",
+        Color = "",
+        File = "",
+        Reference = "",
+        Folder = "",
+        EnumMember = "",
+        Constant = "",
+        Struct = "פּ",
+        Event = "",
+        Operator = "",
+        TypeParameter = "",
+      }
+      return config
+    end,
     init = {
-      -- Completion engine
-      ["hrsh7th/nvim-cmp"] = {
-        event = "InsertEnter",
-        config = function() require "user.configs.cmp" end,
-      },
+      ["hrsh7th/cmp-buffer"] = { disable = true },
 
       ["HerringtonDarkholme/yats.vim"] = {
         event = "InsertEnter",
-      },
-
-      -- LSP Icons
-      ["onsails/lspkind.nvim"] = {
-        -- disable = not vim.g.icons_enabled,
-        module = "lspkind",
-        config = function() require "user.configs.lspkind" end,
       },
 
       ["lukas-reineke/indent-blankline.nvim"] = {
@@ -249,22 +282,6 @@ local config = {
 
       ["avneesh0612/react-nextjs-snippets"] = {
         event = "BufRead",
-      },
-
-      ["nvim-treesitter/nvim-treesitter"] = {
-        run = ":TSUpdate",
-        event = "BufEnter",
-        cmd = {
-          "TSInstall",
-          "TSInstallInfo",
-          "TSInstallSync",
-          "TSUninstall",
-          "TSUpdate",
-          "TSUpdateSync",
-          "TSDisableAll",
-          "TSEnableAll",
-        },
-        config = function() require "user.configs.treesitter" end,
       },
 
       ["windwp/nvim-ts-autotag"] = {
@@ -277,41 +294,11 @@ local config = {
         event = "BufRead",
         config = function()
           local saga = require "lspsaga"
-          saga.init_lsp_saga {
-            symbol_in_winbar = {
-              in_custom = true,
-              click_support = function(node, clicks, button, modifiers)
-                -- To see all avaiable details: vim.pretty_print(node)
-                local st = node.range.start
-                local en = node.range["end"]
-                if button == "l" then
-                  if clicks == 2 then
-                    -- double left click to do nothing
-                  else -- jump to node's starting line+char
-                    vim.fn.cursor(st.line + 1, st.character + 1)
-                  end
-                elseif button == "r" then
-                  if modifiers == "s" then
-                    print "lspsaga" -- shift right click to print "lspsaga"
-                  end -- jump to node's ending line+char
-                  vim.fn.cursor(en.line + 1, en.character + 1)
-                elseif button == "m" then
-                  -- middle click to visual select node
-                  vim.fn.cursor(st.line + 1, st.character + 1)
-                  vim.cmd "normal v"
-                  vim.fn.cursor(en.line + 1, en.character + 1)
-                end
-              end,
-            },
-          }
+          saga.init_lsp_saga {}
         end,
       },
 
       ["kvrohit/mellow.nvim"] = {},
-      ["catppuccin/nvim"] = {
-        as = "catppuccin",
-        config = function() vim.g.catppuccin_flavour = "mocha" end,
-      },
     },
     -- All other entries override the require("<key>").setup({...}) call for default plugins
     ["null-ls"] = function(config) -- overrides `require("null-ls").setup(config)`
@@ -322,19 +309,41 @@ local config = {
         null_ls.builtins.formatting.stylua,
         null_ls.builtins.formatting.prettierd,
         null_ls.builtins.formatting.eslint_d,
-        null_ls.builtins.formatting.stylelint,
+        null_ls.builtins.formatting.stylelint.with {
+          filetypes = { "css", "sass", "scss", "less" },
+        },
         -- Diagnostics
-        null_ls.builtins.diagnostics.stylelint,
+        null_ls.builtins.diagnostics.stylelint.with {
+          filetypes = { "css", "sass", "scss", "less" },
+        },
         null_ls.builtins.diagnostics.eslint_d,
       }
       return config -- return final config table to use in require("null-ls").setup(config)
     end,
     treesitter = {
-      -- ensure_installed = { "lua" },
+      auto_install = true,
+      highlight = {
+        enable = true,
+        additional_vim_regex_highlighting = false,
+      },
+      context_commentstring = {
+        enable = true,
+        enable_autocmd = false,
+      },
+      rainbow = {
+        enable = false,
+        disable = { "html" },
+        extended_mode = false,
+        max_file_lines = nil,
+      },
+      autopairs = { enable = true },
+      autotag = { enable = true },
+      incremental_selection = { enable = true },
+      indent = { enable = true },
     },
     -- use mason-lspconfig to configure LSP installations
     ["mason-lspconfig"] = { -- overrides `require("mason-lspconfig").setup(...)`
-      -- ensure_installed = { "sumneko_lua" },
+      ensure_installed = { "stylelint_lsp" },
     },
     -- use mason-null-ls to configure Formatters/Linter installation for null-ls sources
     ["mason-null-ls"] = { -- overrides `require("mason-null-ls").setup(...)`
@@ -350,8 +359,8 @@ local config = {
     source_priority = {
       nvim_lsp = 1000,
       luasnip = 750,
-      buffer = 500,
-      path = 250,
+      path = 500,
+      buffer = false,
     },
   },
 
