@@ -123,10 +123,10 @@ local config = {
       lightspeed = false,
       ["neo-tree"] = true,
       notify = true,
-      ["nvim-tree"] = false,
+      ["nvim-tree"] = true,
       ["nvim-web-devicons"] = true,
       rainbow = true,
-      symbols_outline = false,
+      symbols_outline = true,
       telescope = true,
       treesitter = true,
       vimwiki = false,
@@ -143,10 +143,6 @@ local config = {
   lsp = {
     -- enable servers that you already have installed without mason
     servers = {
-      "tsserver",
-      "stylelint_lsp",
-    },
-    skip_setup = {
       "stylelint_lsp",
     },
     formatting = {
@@ -173,6 +169,7 @@ local config = {
         -- ["<leader>lf"] = false -- disable formatting keymap
         ["[d"] = false,
         ["]d"] = false,
+        ["gl"] = false,
       },
     },
     -- add to the global LSP on_attach function
@@ -188,10 +185,8 @@ local config = {
     ["server-settings"] = {
       -- example for addings schemas to yamlls
       stylelint_lsp = { -- override table for require("lspconfig").stylelint_lsp.setup({...})
-        stylelintplus = {
-          autoFixOnFormat = true,
-          filetypes = { "css", "sass", "scss", "less" },
-        },
+        autoFixOnFormat = true,
+        filetypes = { "css", "sass", "scss", "less" },
       },
     },
   },
@@ -216,11 +211,15 @@ local config = {
       },
       ["[d"] = {
         "<Cmd>Lspsaga diagnostic_jump_prev<CR>",
-        desc = "lspsaga lsp finder",
+        desc = "prev diagnostic line",
       },
       ["]d"] = {
         "<Cmd>Lspsaga diagnostic_jump_next<CR>",
-        desc = "lspsaga lsp finder",
+        desc = "next diagnostic line",
+      },
+      ["gl"] = {
+        "<Cmd>Lspsaga show_line_diagnostics<CR>",
+        desc = "diagnostics line",
       },
     },
   },
@@ -239,40 +238,29 @@ local config = {
         vim_item.menu = entry.completion_item.detail
         return vim_item
       end
-      config.symbol_map = {
-        Text = "",
-        Method = "",
-        Function = "",
-        Constructor = "",
-        Field = "ﰠ",
-        Variable = "",
-        Class = "ﴯ",
-        Interface = "",
-        Module = "",
-        Property = "ﰠ",
-        Unit = "塞",
-        Value = "",
-        Enum = "",
-        Keyword = "",
-        Snippet = "",
-        Color = "",
-        File = "",
-        Reference = "",
-        Folder = "",
-        EnumMember = "",
-        Constant = "",
-        Struct = "פּ",
-        Event = "",
-        Operator = "",
-        TypeParameter = "",
-      }
       return config
     end,
     init = {
-      ["hrsh7th/cmp-buffer"] = { disable = true },
+      -- ["hrsh7th/cmp-buffer"] = { disable = true },
 
       ["HerringtonDarkholme/yats.vim"] = {
         event = "InsertEnter",
+      },
+
+      ["nvim-treesitter/nvim-treesitter"] = {
+        run = ":TSUpdate",
+        event = "BufEnter",
+        cmd = {
+          "TSInstall",
+          "TSInstallInfo",
+          "TSInstallSync",
+          "TSUninstall",
+          "TSUpdate",
+          "TSUpdateSync",
+          "TSDisableAll",
+          "TSEnableAll",
+        },
+        config = function() require "user.configs.treesitter" end,
       },
 
       ["lukas-reineke/indent-blankline.nvim"] = {
@@ -307,43 +295,21 @@ local config = {
       config.sources = {
         -- Set a formatter
         null_ls.builtins.formatting.stylua,
-        null_ls.builtins.formatting.prettierd,
+        null_ls.builtins.formatting.prettierd.with {
+          prefer_local = "node_modules/.bin",
+        },
         null_ls.builtins.formatting.eslint_d,
-        null_ls.builtins.formatting.stylelint.with {
-          filetypes = { "css", "sass", "scss", "less" },
-        },
+        null_ls.builtins.formatting.stylelint,
         -- Diagnostics
-        null_ls.builtins.diagnostics.stylelint.with {
-          filetypes = { "css", "sass", "scss", "less" },
-        },
+        null_ls.builtins.diagnostics.stylelint,
         null_ls.builtins.diagnostics.eslint_d,
       }
       return config -- return final config table to use in require("null-ls").setup(config)
     end,
-    treesitter = {
-      auto_install = true,
-      highlight = {
-        enable = true,
-        additional_vim_regex_highlighting = false,
-      },
-      context_commentstring = {
-        enable = true,
-        enable_autocmd = false,
-      },
-      rainbow = {
-        enable = false,
-        disable = { "html" },
-        extended_mode = false,
-        max_file_lines = nil,
-      },
-      autopairs = { enable = true },
-      autotag = { enable = true },
-      incremental_selection = { enable = true },
-      indent = { enable = true },
-    },
+    treesitter = {},
     -- use mason-lspconfig to configure LSP installations
     ["mason-lspconfig"] = { -- overrides `require("mason-lspconfig").setup(...)`
-      ensure_installed = { "stylelint_lsp" },
+      -- ensure_installed = { "stylelint_lsp" },
     },
     -- use mason-null-ls to configure Formatters/Linter installation for null-ls sources
     ["mason-null-ls"] = { -- overrides `require("mason-null-ls").setup(...)`
@@ -383,20 +349,20 @@ local config = {
   -- This function is run last and is a good place to configuring
   -- augroups/autocommands and custom filetypes also this just pure lua so
   -- anything that doesn't fit in the normal config locations above can go here
-  -- polish = function()
-  --   -- Set up custom filetypes
-  --   vim.filetype.add {
-  --     extension = {
-  --       foo = "fooscript",
-  --     },
-  --     filename = {
-  --       ["Foofile"] = "fooscript",
-  --     },
-  --     pattern = {
-  --       ["~/%.config/foo/.*"] = "fooscript",
-  --     },
-  --   }
-  -- end,
+  polish = function()
+    -- Set up custom filetypes
+    -- vim.filetype.add {
+    --   extension = {
+    --     foo = "fooscript",
+    --   },
+    --   filename = {
+    --     ["Foofile"] = "fooscript",
+    --   },
+    --   pattern = {
+    --     ["~/%.config/foo/.*"] = "fooscript",
+    --   },
+    -- }
+  end,
 }
 
 return config
