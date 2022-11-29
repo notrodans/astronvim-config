@@ -236,12 +236,6 @@ local config = {
       return config
     end,
     init = {
-      -- ["hrsh7th/cmp-buffer"] = { disable = true },
-
-      ["HerringtonDarkholme/yats.vim"] = {
-        event = "InsertEnter",
-      },
-
       ["lukas-reineke/indent-blankline.nvim"] = {
         event = "BufEnter",
         config = function() require "user.configs.indent-line" end,
