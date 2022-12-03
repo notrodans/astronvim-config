@@ -33,6 +33,10 @@ local config = {
     -- init = { -- this table overrides highlights in all themes
     --   Normal = { bg = "#000000" },
     -- }
+    ["catppuccin"] = {
+      Normal = { fg = "", bg = "" },
+      CursorLine = { fg = "", bg = "#1B1B1D" },
+    },
     -- duskfox = { -- a table of overrides/changes to the duskfox theme
     --   Normal = { bg = "#000000" },
     -- },
@@ -52,9 +56,9 @@ local config = {
       wrap = false, -- sets vim.opt.wrap
       cmdheight = 1,
       completeopt = { "menu", "menuone", "noselect" },
-      -- tabstop = 2,
-      -- softtabstop = 2,
-      -- shiftwidth = 2,
+      tabstop = 4,
+      softtabstop = 4,
+      shiftwidth = 4,
     },
     g = {
       mapleader = " ", -- sets vim.g.mapleader
@@ -94,10 +98,10 @@ local config = {
   -- Default theme configuration
   default_theme = {
     -- Modify the color palette for the default theme
-    -- colors = {
-    --   fg = "#CDD6F4",
-    --   bg = "#1E1E2E",
-    -- },
+    colors = {
+      fg = "",
+      bg = "",
+    },
     highlights = function(hl) -- or a function that returns a new table of colors to set
       local C = require "default_theme.colors"
 
@@ -143,9 +147,7 @@ local config = {
   -- Extend LSP configuration
   lsp = {
     -- enable servers that you already have installed without mason
-    servers = {
-      "stylelint_lsp",
-    },
+    servers = {},
     formatting = {
       format_on_save = {
         enabled = false, -- enable or disable format on save globally
@@ -153,14 +155,17 @@ local config = {
           -- "go",
         },
         ignore_filetypes = { -- disable format on save for specified filetypes
-          -- "python",
+          -- "python"
         },
       },
-      -- disabled = { -- disable formatting capabilities for the listed clients
-      -- },
-      -- filter = function(client) -- fully override the default formatting function
-      --   return true
-      -- end
+      disabled = { -- disable formatting capabilities for the listed clients
+        "jsonls",
+        "html",
+      },
+      -- filter = function(client)
+      --   -- apply whatever logic you want (in this example, we'll only use null-ls)
+      --   return client.name == "null-ls"
+      -- end,
       -- timeout_ms = 1000, -- default format timeout
       async = true,
     },
@@ -186,7 +191,6 @@ local config = {
     ["server-settings"] = {
       -- example for addings schemas to yamlls
       stylelint_lsp = { -- override table for require("lspconfig").stylelint_lsp.setup({...})
-        autoFixOnFormat = true,
         filetypes = { "css", "sass", "scss", "less" },
       },
     },
@@ -260,6 +264,7 @@ local config = {
       },
 
       ["kvrohit/mellow.nvim"] = {},
+      ["catppuccin/nvim"] = {},
     },
     -- All other entries override the require("<key>").setup({...}) call for default plugins
     ["null-ls"] = function(config) -- overrides `require("null-ls").setup(config)`
@@ -268,14 +273,10 @@ local config = {
       config.sources = {
         -- Set a formatter
         null_ls.builtins.formatting.stylua,
-        null_ls.builtins.formatting.prettierd.with {
-          prefer_local = "node_modules/.bin",
-        },
-        null_ls.builtins.formatting.eslint_d,
+        null_ls.builtins.formatting.prettierd,
         null_ls.builtins.formatting.stylelint,
         -- Diagnostics
         null_ls.builtins.diagnostics.stylelint,
-        null_ls.builtins.diagnostics.eslint_d,
       }
       return config -- return final config table to use in require("null-ls").setup(config)
     end,
@@ -304,6 +305,8 @@ local config = {
         "html",
         "cssls",
         "jsonls",
+        "stylelint_lsp",
+        "emmet_ls",
       },
     },
     -- use mason-null-ls to configure Formatters/Linter installation for null-ls sources
