@@ -35,7 +35,6 @@ local config = {
     -- }
     ["catppuccin"] = {
       Normal = { fg = "", bg = "" },
-      CursorLine = { fg = "", bg = "#1B1B1D" },
     },
     -- duskfox = { -- a table of overrides/changes to the duskfox theme
     --   Normal = { bg = "#000000" },
@@ -57,6 +56,7 @@ local config = {
       cmdheight = 1,
       completeopt = { "menu", "menuone", "noselect" },
       tabstop = 4,
+      guicursor = "n-c-v:block-nCursor",
       softtabstop = 4,
       shiftwidth = 4,
     },
@@ -99,13 +99,13 @@ local config = {
   default_theme = {
     -- Modify the color palette for the default theme
     colors = {
-      fg = "",
+      fg = "#abb2bf",
       bg = "",
     },
     highlights = function(hl) -- or a function that returns a new table of colors to set
       local C = require "default_theme.colors"
 
-      hl.Normal = { fg = C.fg, bg = C.bg }
+      hl.Normal = { fg = C.fg }
 
       -- New approach instead of diagnostic_style
       hl.DiagnosticError.italic = true
@@ -127,11 +127,11 @@ local config = {
       indent_blankline = true,
       lightspeed = false,
       ["neo-tree"] = true,
-      notify = true,
-      ["nvim-tree"] = true,
+      notify = false,
+      ["nvim-tree"] = false,
       ["nvim-web-devicons"] = true,
       rainbow = true,
-      symbols_outline = true,
+      symbols_outline = false,
       telescope = true,
       treesitter = true,
       vimwiki = false,
@@ -141,7 +141,6 @@ local config = {
   diagnostics = {
     virtual_text = true,
     underline = true,
-    signs = true,
   },
 
   -- Extend LSP configuration
@@ -161,6 +160,7 @@ local config = {
       disabled = { -- disable formatting capabilities for the listed clients
         "jsonls",
         "html",
+        "tsserver"
       },
       -- filter = function(client)
       --   -- apply whatever logic you want (in this example, we'll only use null-ls)
@@ -273,14 +273,16 @@ local config = {
       config.sources = {
         -- Set a formatter
         null_ls.builtins.formatting.stylua,
-        null_ls.builtins.formatting.prettierd,
         null_ls.builtins.formatting.stylelint,
+        null_ls.builtins.formatting.prettierd,
         -- Diagnostics
         null_ls.builtins.diagnostics.stylelint,
+        null_ls.builtins.diagnostics.eslint_d,
       }
       return config -- return final config table to use in require("null-ls").setup(config)
     end,
     treesitter = {
+      auto_install = true,
       ensure_installed = {
         "tsx",
         "javascript",
@@ -317,6 +319,7 @@ local config = {
         "prettierd",
         "stylua",
       },
+      automatic_setup = false,
     },
   },
 

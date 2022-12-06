@@ -42,4 +42,5 @@ indent_blankline.setup(astronvim.user_plugin_opts("plugins.indent_blankline", {
   show_trailing_blankline_indent = false,
   use_treesitter = true,
   show_current_context = true,
+  show_current_context_start = true,
 }))
