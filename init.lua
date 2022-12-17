@@ -16,7 +16,7 @@ local config = {
     pin_plugins = nil, -- nil, true, false (nil will pin plugins on stable only)
     skip_prompts = false, -- skip prompts about breaking changes
     show_changelog = true, -- show the changelog after performing an update
-    auto_reload = false, -- automatically reload and sync packer after a successful update
+    auto_reload = true, -- automatically reload and sync packer after a successful update
     auto_quit = false, -- automatically quit the current session after a successful update
     -- remotes = { -- easily add new remotes to track
     --   ["remote_name"] = "https://remote_url.come/repo.git", -- full remote url
@@ -33,9 +33,6 @@ local config = {
     -- init = { -- this table overrides highlights in all themes
     --   Normal = { bg = "#000000" },
     -- }
-    ["catppuccin"] = {
-      Normal = { fg = "", bg = "" },
-    },
     -- duskfox = { -- a table of overrides/changes to the duskfox theme
     --   Normal = { bg = "#000000" },
     -- },
@@ -51,12 +48,11 @@ local config = {
       smarttab = true,
       number = true, -- sets vim.opt.number
       spell = false, -- sets vim.opt.spell
-      signcolumn = "auto", -- sets vim.opt.signcolumn to auto
+      signcolumn = "yes", -- sets vim.opt.signcolumn to auto
       wrap = false, -- sets vim.opt.wrap
       cmdheight = 1,
       completeopt = { "menu", "menuone", "noselect" },
       tabstop = 4,
-      guicursor = "n-c-v:block-nCursor",
       softtabstop = 4,
       shiftwidth = 4,
     },
@@ -100,12 +96,15 @@ local config = {
     -- Modify the color palette for the default theme
     colors = {
       fg = "#abb2bf",
-      bg = "",
+      bg = "#181A1F",
+      black = "#1e222a",
     },
     highlights = function(hl) -- or a function that returns a new table of colors to set
       local C = require "default_theme.colors"
 
-      hl.Normal = { fg = C.fg }
+      hl.Normal = { fg = C.fg, bg = "" }
+      hl.NormalNC = { fg = C.fg, bg = "" }
+      hl.WildMenu = { fg = C.grey_3, bg = "" }
 
       -- New approach instead of diagnostic_style
       hl.DiagnosticError.italic = true
@@ -120,14 +119,14 @@ local config = {
       aerial = true,
       beacon = false,
       bufferline = true,
-      cmp = true,
+      cmp = false,
       dashboard = true,
       highlighturl = true,
       hop = false,
       indent_blankline = true,
       lightspeed = false,
-      ["neo-tree"] = true,
-      notify = false,
+      ["neo-tree"] = false,
+      notify = true,
       ["nvim-tree"] = false,
       ["nvim-web-devicons"] = true,
       rainbow = true,
@@ -161,6 +160,10 @@ local config = {
         "jsonls",
         "html",
         "tsserver",
+<<<<<<< Updated upstream
+=======
+        "sumneko_lua",
+>>>>>>> Stashed changes
       },
       -- filter = function(client)
       --   -- apply whatever logic you want (in this example, we'll only use null-ls)
@@ -192,6 +195,16 @@ local config = {
       -- example for addings schemas to yamlls
       stylelint_lsp = { -- override table for require("lspconfig").stylelint_lsp.setup({...})
         filetypes = { "css", "sass", "scss", "less" },
+      },
+      tsserver = {
+        init_options = {
+          plugins = {
+            {
+              name = "anything",
+              location = "anything",
+            },
+          },
+        },
       },
     },
   },
@@ -245,6 +258,8 @@ local config = {
         config = function() require "user.configs.indent-line" end,
       },
 
+      { "andweeb/presence.nvim" },
+
       ["avneesh0612/react-nextjs-snippets"] = {
         event = "BufRead",
       },
@@ -263,6 +278,7 @@ local config = {
         end,
       },
 
+      -- Colorschemes
       ["kvrohit/mellow.nvim"] = {},
       ["catppuccin/nvim"] = {},
     },
@@ -274,7 +290,9 @@ local config = {
         -- Set a formatter
         null_ls.builtins.formatting.stylua,
         null_ls.builtins.formatting.stylelint,
-        null_ls.builtins.formatting.prettierd,
+        null_ls.builtins.formatting.prettierd.with {
+          filetypes = { "javascriptreact", "javascript", "typescriptreact", "typescript", "html", "json" },
+        },
         -- Diagnostics
         null_ls.builtins.diagnostics.stylelint,
         null_ls.builtins.diagnostics.eslint_d,
@@ -295,8 +313,6 @@ local config = {
       },
       rainbow = {
         enable = false,
-        extended_mode = false,
-        max_file_lines = nil,
       },
     },
     -- use mason-lspconfig to configure LSP installations
@@ -321,18 +337,23 @@ local config = {
       },
       automatic_setup = false,
     },
+    ["mason-nvim-dap"] = { -- overrides `require("mason-nvim-dap").setup(...)`
+      -- ensure_installed = { "python" },
+    },
   },
 
   luasnip = {
-    vscode_snippet_paths = { "./lua/user/snippets" },
+    vscode = {
+      paths = { "./lua/user/snippets" },
+    },
   },
 
   cmp = {
     source_priority = {
       nvim_lsp = 1000,
       luasnip = 750,
-      path = 500,
-      buffer = false,
+      buffer = 500,
+      path = 250,
     },
   },
 
