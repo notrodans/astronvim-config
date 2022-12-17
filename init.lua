@@ -160,10 +160,7 @@ local config = {
         "jsonls",
         "html",
         "tsserver",
-<<<<<<< Updated upstream
-=======
         "sumneko_lua",
->>>>>>> Stashed changes
       },
       -- filter = function(client)
       --   -- apply whatever logic you want (in this example, we'll only use null-ls)
