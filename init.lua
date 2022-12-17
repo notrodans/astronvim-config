@@ -160,7 +160,7 @@ local config = {
       disabled = { -- disable formatting capabilities for the listed clients
         "jsonls",
         "html",
-        "tsserver"
+        "tsserver",
       },
       -- filter = function(client)
       --   -- apply whatever logic you want (in this example, we'll only use null-ls)
