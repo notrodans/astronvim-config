@@ -1,392 +1,314 @@
---              AstroNvim Configuration Table
--- All configuration changes should go inside of the table below
-
--- You can think of a Lua "table" as a dictionary like data structure the
--- normal format is "key = value". These also handle array like data structures
--- where a value with no key simply has an implicit numeric key
 local config = {
 
-  -- Configure AstroNvim updates
-  updater = {
-    remote = "origin", -- remote to use
-    channel = "nightly", -- "stable" or "nightly"
-    version = "latest", -- "latest", tag name, or regex search like "v1.*" to only do updates before v2 (STABLE ONLY)
-    branch = "main", -- branch name (NIGHTLY ONLY)
-    commit = nil, -- commit hash (NIGHTLY ONLY)
-    pin_plugins = nil, -- nil, true, false (nil will pin plugins on stable only)
-    skip_prompts = false, -- skip prompts about breaking changes
-    show_changelog = true, -- show the changelog after performing an update
-    auto_reload = true, -- automatically reload and sync packer after a successful update
-    auto_quit = false, -- automatically quit the current session after a successful update
-    -- remotes = { -- easily add new remotes to track
-    --   ["remote_name"] = "https://remote_url.come/repo.git", -- full remote url
-    --   ["remote2"] = "github_user/repo", -- GitHub user/repo shortcut,
-    --   ["remote3"] = "github_user", -- GitHub user assume AstroNvim fork
-    -- },
-  },
+	updater = {
+		remote = "origin", -- remote to use
+		channel = "nightly", -- "stable" or "nightly"
+		version = "latest", -- "latest", tag name, or regex search like "v1.*" to only do updates before v2 (STABLE ONLY)
+		branch = "main", -- branch name (NIGHTLY ONLY)
+		commit = nil, -- commit hash (NIGHTLY ONLY)
+		pin_plugins = nil, -- nil, true, false (nil will pin plugins on stable only)
+		skip_prompts = false, -- skip prompts about breaking changes
+		show_changelog = true, -- show the changelog after performing an update
+		auto_reload = true, -- automatically reload and sync packer after a successful update
+		auto_quit = false, -- automatically quit the current session after a successful update
+		-- remotes = { -- easily add new remotes to track
+		--   ["remote_name"] = "https://remote_url.come/repo.git", -- full remote url
+		--   ["remote2"] = "github_user/repo", -- GitHub user/repo shortcut,
+		--   ["remote3"] = "github_user", -- GitHub user assume AstroNvim fork
+		-- },
+	},
 
-  -- Set colorscheme to use
-  colorscheme = "mellow",
+	colorscheme = "default_theme",
 
-  -- Add highlight groups in any theme
-  highlights = {
-    -- init = { -- this table overrides highlights in all themes
-    --   Normal = { bg = "#000000" },
-    -- }
-    -- duskfox = { -- a table of overrides/changes to the duskfox theme
-    --   Normal = { bg = "#000000" },
-    -- },
-  },
+	highlights = {
+		-- init = { -- this table overrides highlights in all themes
+		--   Normal = { bg = "#000000" },
+		-- }
+		-- duskfox = { -- a table of overrides/changes to the duskfox theme
+		--   Normal = { bg = "#000000" },
+		-- },
+	},
 
-  -- set vim options here (vim.<first_key>.<second_key> =  value)
-  options = {
-    opt = {
-      -- set to true or false etc.
-      relativenumber = true, -- sets vim.ohout set scroll=0, the scrpt.relativenumber
-      expandtab = true,
-      smartindent = true,
-      smarttab = true,
-      number = true, -- sets vim.opt.number
-      spell = false, -- sets vim.opt.spell
-      signcolumn = "yes", -- sets vim.opt.signcolumn to auto
-      wrap = false, -- sets vim.opt.wrap
-      cmdheight = 1,
-      completeopt = { "menu", "menuone", "noselect" },
-      tabstop = 4,
-      softtabstop = 4,
-      shiftwidth = 4,
-    },
-    g = {
-      mapleader = " ", -- sets vim.g.mapleader
-      autoformat_enabled = true, -- enable or disable auto formatting at start (lsp.formatting.format_on_save must be enabled)
-      cmp_enabled = true, -- enable completion at start
-      autopairs_enabled = true, -- enable autopairs at start
-      diagnostics_enabled = true, -- enable diagnostics at start
-      status_diagnostics_enabled = true, -- enable diagnostics in statusline
-      icons_enabled = true, -- disable icons in the UI (disable if no nerd font is available, requires :PackerSync after changing)
-      ui_notifications_enabled = true, -- disable notifications when toggling UI elements
-    },
-  },
+	options = {
+		opt = {
+			expandtab = true,
+			smartindent = true,
+			smarttab = true,
+			number = true,
+			spell = false,
+			signcolumn = "yes",
+			cmdheight = 1,
+			completeopt = { "menu", "menuone", "noselect" },
+			tabstop = 4,
+			softtabstop = 4,
+			shiftwidth = 4,
+		},
+		g = {
+			mapleader = " ", -- sets vim.g.mapleader
+			autoformat_enabled = true, -- enable or disable auto formatting at start (lsp.formatting.format_on_save must be enabled)
+			cmp_enabled = true, -- enable completion at start
+			autopairs_enabled = true, -- enable autopairs at start
+			diagnostics_enabled = true, -- enable diagnostics at start
+			status_diagnostics_enabled = true, -- enable diagnostics in statusline
+			icons_enabled = true, -- disable icons in the UI (disable if no nerd font is available, requires :PackerSync after changing)
+			ui_notifications_enabled = true, -- disable notifications when toggling UI elements
 
-  -- If you need more control, you can use the function()...end notation
-  -- options = function(local_vim)
-  --   local_vim.opt.relativenumber = true
-  --   local_vim.g.mapleader = " "
-  --   local_vim.opt.whichwrap = vim.opt.whichwrap - { 'b', 's' } -- removing option from list
-  --   local_vim.opt.shortmess = vim.opt.shortmess + { I = true } -- add to option list
-  --
-  --   return local_vim
-  -- end,
+			-- mellow colorscheme
+			mellow_italic_keywords = true,
+			mellow_italic_booleans = true,
+			mellow_italic_functions = true,
+			mellow_bold_keywords = true,
+			mellow_bold_functions = true,
+		},
+	},
 
-  -- Set dashboard header
-  header = {
-    " ▄▄▄        ██████  ██▓ ██▀███   ██▓▒██   ██▒",
-    "▒████▄    ▒██    ▒ ▓██▒▓██ ▒ ██▒▓██▒▒▒ █ █ ▒░",
-    "▒██  ▀█▄  ░ ▓██▄   ▒██▒▓██ ░▄█ ▒▒██▒░░  █   ░",
-    "░██▄▄▄▄██   ▒   ██▒░██░▒██▀▀█▄  ░██░ ░ █ █ ▒ ",
-    "▓█   ▓██▒▒██████▒▒░██░░██▓ ▒██▒░██░▒██▒ ▒██▒",
-    "▒▒   ▓▒█░▒ ▒▓▒ ▒ ░░▓  ░ ▒▓ ░▒▓░░▓  ▒▒ ░ ░▓ ░",
-    " ▒   ▒▒ ░░ ░▒  ░ ░ ▒ ░  ░▒ ░ ▒░ ▒ ░░░   ░▒ ░",
-    " ░   ▒   ░  ░  ░   ▒ ░  ░░   ░  ▒ ░ ░    ░  ",
-    "      ░  ░      ░   ░     ░      ░   ░    ░  ",
-  },
+	header = {
+		" ▄▄▄        ██████  ██▓ ██▀███   ██▓▒██   ██▒",
+		"▒████▄    ▒██    ▒ ▓██▒▓██ ▒ ██▒▓██▒▒▒ █ █ ▒░",
+		"▒██  ▀█▄  ░ ▓██▄   ▒██▒▓██ ░▄█ ▒▒██▒░░  █   ░",
+		"░██▄▄▄▄██   ▒   ██▒░██░▒██▀▀█▄  ░██░ ░ █ █ ▒ ",
+		"▓█   ▓██▒▒██████▒▒░██░░██▓ ▒██▒░██░▒██▒ ▒██▒",
+		"▒▒   ▓▒█░▒ ▒▓▒ ▒ ░░▓  ░ ▒▓ ░▒▓░░▓  ▒▒ ░ ░▓ ░",
+		" ▒   ▒▒ ░░ ░▒  ░ ░ ▒ ░  ░▒ ░ ▒░ ▒ ░░░   ░▒ ░",
+		" ░   ▒   ░  ░  ░   ▒ ░  ░░   ░  ▒ ░ ░    ░  ",
+		"      ░  ░      ░   ░     ░      ░   ░    ░  ",
+	},
 
-  -- Default theme configuration
-  default_theme = {
-    -- Modify the color palette for the default theme
-    colors = {
-      fg = "#abb2bf",
-      bg = "#181A1F",
-      black = "#1e222a",
-    },
-    highlights = function(hl) -- or a function that returns a new table of colors to set
-      local C = require "default_theme.colors"
+	default_theme = {
+		colors = {
+			fg = "#abb2bf",
+			bg = "#181A1F",
+			black = "#1e222a",
+		},
+		highlights = function(hl)
+			local C = require "default_theme.colors"
 
-      hl.Normal = { fg = C.fg, bg = "" }
-      hl.NormalNC = { fg = C.fg, bg = "" }
-      hl.WildMenu = { fg = C.grey_3, bg = "" }
+			hl.Normal = { fg = C.fg, bg = "" }
+			hl.NormalNC = { fg = C.fg, bg = "" }
+			hl.WildMenu = { fg = C.grey_3, bg = "" }
 
-      -- New approach instead of diagnostic_style
-      hl.DiagnosticError.italic = true
-      hl.DiagnosticHint.italic = true
-      hl.DiagnosticInfo.italic = true
-      hl.DiagnosticWarn.italic = true
+			hl.DiagnosticError.italic = true
+			hl.DiagnosticHint.italic = true
+			hl.DiagnosticInfo.italic = true
+			hl.DiagnosticWarn.italic = true
 
-      return hl
-    end,
-    -- enable or disable highlighting for extra plugins
-    plugins = {
-      aerial = true,
-      beacon = false,
-      bufferline = true,
-      cmp = false,
-      dashboard = true,
-      highlighturl = true,
-      hop = false,
-      indent_blankline = true,
-      lightspeed = false,
-      ["neo-tree"] = false,
-      notify = true,
-      ["nvim-tree"] = false,
-      ["nvim-web-devicons"] = true,
-      rainbow = true,
-      symbols_outline = false,
-      telescope = true,
-      treesitter = true,
-      vimwiki = false,
-      ["which-key"] = true,
-    },
-  }, -- Diagnostics configuration (for vim.diagnostics.config({...}))
-  diagnostics = {
-    virtual_text = true,
-    underline = true,
-  },
+			return hl
+		end,
+		plugins = {
+			aerial = true,
+			beacon = false,
+			bufferline = true,
+			cmp = false,
+			dashboard = true,
+			highlighturl = true,
+			hop = false,
+			indent_blankline = true,
+			lightspeed = false,
+			["neo-tree"] = false,
+			notify = true,
+			["nvim-tree"] = false,
+			["nvim-web-devicons"] = true,
+			rainbow = true,
+			symbols_outline = false,
+			telescope = true,
+			treesitter = true,
+			vimwiki = false,
+			["which-key"] = true,
+		},
+	},
 
-  -- Extend LSP configuration
-  lsp = {
-    -- enable servers that you already have installed without mason
-    servers = {},
-    formatting = {
-      format_on_save = {
-        enabled = false, -- enable or disable format on save globally
-        allow_filetypes = { -- enable format on save for specified filetypes only
-          -- "go",
-        },
-        ignore_filetypes = { -- disable format on save for specified filetypes
-          -- "python"
-        },
-      },
-      disabled = { -- disable formatting capabilities for the listed clients
-        "jsonls",
-        "html",
-        "tsserver",
-        "sumneko_lua",
-      },
-      -- filter = function(client)
-      --   -- apply whatever logic you want (in this example, we'll only use null-ls)
-      --   return client.name == "null-ls"
-      -- end,
-      -- timeout_ms = 1000, -- default format timeout
-      async = true,
-    },
-    -- easily add or disable built in mappings added during LSP attaching
-    mappings = {
-      n = {
-        -- ["<leader>lf"] = false -- disable formatting keymap
-        ["[d"] = false,
-        ["]d"] = false,
-        ["gl"] = false,
-      },
-    },
-    -- add to the global LSP on_attach function
-    -- on_attach = function(client, bufnr)
-    -- end,
+	diagnostics = {
+		virtual_text = true,
+		underline = true,
+	},
 
-    -- override the mason server-registration function
-    -- server_registration = function(server, opts)
-    --   require("lspconfig")[server].setup(opts)
-    -- end,
+	lsp = {
+		servers = {},
+		formatting = {
+			format_on_save = {
+				enabled = false,
+				allow_filetypes = {
+					-- "go",
+				},
+				ignore_filetypes = {
+					-- "python"
+				},
+			},
+			disabled = {
+				"jsonls",
+				"html",
+				"tsserver",
+				"sumneko_lua",
+			},
+			async = true,
+		},
+		mappings = {
+			n = {
+				["[d"] = false,
+				["]d"] = false,
+				["gl"] = false,
+			},
+		},
+		["server-settings"] = {
+			stylelint_lsp = {
+				filetypes = { "css", "sass", "scss", "less" },
+			},
+			tsserver = {
+				init_options = {
+					plugins = {
+						{
+							name = "anything",
+							location = "anything",
+						},
+					},
+				},
+			},
+		},
+	},
 
-    -- Add overrides for LSP server settings, the keys are the name of the server
-    ["server-settings"] = {
-      -- example for addings schemas to yamlls
-      stylelint_lsp = { -- override table for require("lspconfig").stylelint_lsp.setup({...})
-        filetypes = { "css", "sass", "scss", "less" },
-      },
-      tsserver = {
-        init_options = {
-          plugins = {
-            {
-              name = "anything",
-              location = "anything",
-            },
-          },
-        },
-      },
-    },
-  },
+	mappings = {
+		n = {
+			["<leader>bb"] = { "<cmd>tabnew<cr>", desc = "New tab" },
+			["<leader>bc"] = { "<cmd>BufferLinePickClose<cr>", desc = "Pick to close" },
+			["<leader>bj"] = { "<cmd>BufferLinePick<cr>", desc = "Pick to jump" },
+			["<leader>bt"] = { "<cmd>BufferLineSortByTabs<cr>", desc = "Sort by tabs" },
+			["<C-f>"] = {
+				"<Cmd>Lspsaga lsp_finder<CR>",
+				desc = "lspsaga lsp finder",
+			},
+			["[d"] = {
+				"<Cmd>Lspsaga diagnostic_jump_prev<CR>",
+				desc = "prev diagnostic line",
+			},
+			["]d"] = {
+				"<Cmd>Lspsaga diagnostic_jump_next<CR>",
+				desc = "next diagnostic line",
+			},
+			["gl"] = {
+				"<Cmd>Lspsaga show_line_diagnostics<CR>",
+				desc = "diagnostics line",
+			},
+		},
+	},
 
-  -- Mapping data with "desc" stored directly by vim.keymap.set().
-  --
-  -- Please use this mappings table to set keyboard mapping since this is the
-  -- lower level configuration and more robust one. (which-key will
-  -- automatically pick-up stored data by this setting.)
-  mappings = {
-    -- first key is the mode
-    n = {
-      -- second key is the lefthand side of the map
-      -- mappings seen under group name "Buffer"
-      ["<leader>bb"] = { "<cmd>tabnew<cr>", desc = "New tab" },
-      ["<leader>bc"] = { "<cmd>BufferLinePickClose<cr>", desc = "Pick to close" },
-      ["<leader>bj"] = { "<cmd>BufferLinePick<cr>", desc = "Pick to jump" },
-      ["<leader>bt"] = { "<cmd>BufferLineSortByTabs<cr>", desc = "Sort by tabs" },
-      ["<C-f>"] = {
-        "<Cmd>Lspsaga lsp_finder<CR>",
-        desc = "lspsaga lsp finder",
-      },
-      ["[d"] = {
-        "<Cmd>Lspsaga diagnostic_jump_prev<CR>",
-        desc = "prev diagnostic line",
-      },
-      ["]d"] = {
-        "<Cmd>Lspsaga diagnostic_jump_next<CR>",
-        desc = "next diagnostic line",
-      },
-      ["gl"] = {
-        "<Cmd>Lspsaga show_line_diagnostics<CR>",
-        desc = "diagnostics line",
-      },
-    },
-  },
+	plugins = {
+		lspkind = function(config)
+			config.mode = "symbol_text"
+			config.before = function(entry, vim_item)
+				vim_item.menu = entry.completion_item.detail
+				return vim_item
+			end
+			return config
+		end,
+		init = {
+			["lukas-reineke/indent-blankline.nvim"] = {
+				event = "BufEnter",
+				config = function() require "user.configs.indent-line" end,
+			},
+			{ "andweeb/presence.nvim" },
+			["avneesh0612/react-nextjs-snippets"] = {
+				event = "BufRead",
+			},
+			["windwp/nvim-ts-autotag"] = {
+				event = "BufRead",
+				config = function() require("nvim-ts-autotag").setup() end,
+			},
+			["glepnir/lspsaga.nvim"] = {
+				branch = "main",
+				event = "BufRead",
+				config = function()
+					local saga = require "lspsaga"
+					saga.init_lsp_saga {}
+				end,
+			},
+			["kvrohit/mellow.nvim"] = {},
+			["catppuccin/nvim"] = {},
+		},
+		["null-ls"] = function(config)
+			local null_ls = require "null-ls"
+			config.sources = {
+				null_ls.builtins.formatting.stylua,
+				null_ls.builtins.formatting.stylelint,
+				null_ls.builtins.formatting.prettierd.with {
+					filetypes = {
+						"javascriptreact",
+						"javascript",
+						"typescriptreact",
+						"typescript",
+						"html",
+						"json",
+					},
+				},
+				null_ls.builtins.diagnostics.stylelint,
+				null_ls.builtins.diagnostics.eslint_d,
+			}
+			return config
+		end,
+		treesitter = {
+			auto_install = true,
+			ensure_installed = {
+				"tsx",
+				"javascript",
+				"typescript",
+				"scss",
+				"css",
+				"html",
+				"json",
+				"lua",
+			},
+			rainbow = {
+				enable = false,
+			},
+		},
+		["mason-lspconfig"] = {
+			ensure_installed = {
+				"tsserver",
+				"sumneko_lua",
+				"html",
+				"cssls",
+				"jsonls",
+				"stylelint_lsp",
+				"emmet_ls",
+			},
+		},
+		["mason-null-ls"] = {
+			ensure_installed = {
+				"stylelint_lsp",
+				"eslint_d",
+				"prettierd",
+				"stylua",
+			},
+			automatic_setup = false,
+		},
+		["mason-nvim-dap"] = {
+			-- ensure_installed = { "python" },
+		},
+	},
 
-  -- Configure plugins
-  plugins = {
-    lspkind = function(config)
-      config.mode = "symbol_text"
-      config.before = function(entry, vim_item)
-        vim_item.menu = entry.completion_item.detail
-        return vim_item
-      end
-      return config
-    end,
-    init = {
-      ["lukas-reineke/indent-blankline.nvim"] = {
-        event = "BufEnter",
-        config = function() require "user.configs.indent-line" end,
-      },
+	luasnip = {
+		vscode = {
+			paths = { "./lua/user/snippets" },
+		},
+	},
 
-      { "andweeb/presence.nvim" },
+	cmp = {
+		source_priority = {
+			nvim_lsp = 1000,
+			luasnip = 750,
+			buffer = 500,
+			path = 250,
+		},
+	},
 
-      ["avneesh0612/react-nextjs-snippets"] = {
-        event = "BufRead",
-      },
-
-      ["windwp/nvim-ts-autotag"] = {
-        event = "BufRead",
-        config = function() require("nvim-ts-autotag").setup() end,
-      },
-
-      ["glepnir/lspsaga.nvim"] = {
-        branch = "main",
-        event = "BufRead",
-        config = function()
-          local saga = require "lspsaga"
-          saga.init_lsp_saga {}
-        end,
-      },
-
-      -- Colorschemes
-      ["kvrohit/mellow.nvim"] = {},
-      ["catppuccin/nvim"] = {},
-    },
-    -- All other entries override the require("<key>").setup({...}) call for default plugins
-    ["null-ls"] = function(config) -- overrides `require("null-ls").setup(config)`
-      -- config variable is the default configuration table for the setup functino call
-      local null_ls = require "null-ls"
-      config.sources = {
-        -- Set a formatter
-        null_ls.builtins.formatting.stylua,
-        null_ls.builtins.formatting.stylelint,
-        null_ls.builtins.formatting.prettierd.with {
-          filetypes = { "javascriptreact", "javascript", "typescriptreact", "typescript", "html", "json" },
-        },
-        -- Diagnostics
-        null_ls.builtins.diagnostics.stylelint,
-        null_ls.builtins.diagnostics.eslint_d,
-      }
-      return config -- return final config table to use in require("null-ls").setup(config)
-    end,
-    treesitter = {
-      auto_install = true,
-      ensure_installed = {
-        "tsx",
-        "javascript",
-        "typescript",
-        "scss",
-        "css",
-        "html",
-        "json",
-        "lua",
-      },
-      rainbow = {
-        enable = false,
-      },
-    },
-    -- use mason-lspconfig to configure LSP installations
-    ["mason-lspconfig"] = { -- overrides `require("mason-lspconfig").setup(...)`
-      ensure_installed = {
-        "tsserver",
-        "sumneko_lua",
-        "html",
-        "cssls",
-        "jsonls",
-        "stylelint_lsp",
-        "emmet_ls",
-      },
-    },
-    -- use mason-null-ls to configure Formatters/Linter installation for null-ls sources
-    ["mason-null-ls"] = { -- overrides `require("mason-null-ls").setup(...)`
-      ensure_installed = {
-        "stylelint_lsp",
-        "eslint_d",
-        "prettierd",
-        "stylua",
-      },
-      automatic_setup = false,
-    },
-    ["mason-nvim-dap"] = { -- overrides `require("mason-nvim-dap").setup(...)`
-      -- ensure_installed = { "python" },
-    },
-  },
-
-  luasnip = {
-    vscode = {
-      paths = { "./lua/user/snippets" },
-    },
-  },
-
-  cmp = {
-    source_priority = {
-      nvim_lsp = 1000,
-      luasnip = 750,
-      buffer = 500,
-      path = 250,
-    },
-  },
-
-  -- Modify which-key registration (Use this with mappings table in the above.)
-  ["which-key"] = {
-    -- Add bindings which show up as group name
-    register = {
-      -- first key is the mode, n == normal mode
-      n = {
-        -- second key is the prefix, <leader> prefixes
-        ["<leader>"] = {
-          -- third key is the key to bring up next level and its displayed
-          -- group name in which-key top level menu
-          ["b"] = { name = "Buffer" },
-        },
-      },
-    },
-  },
-
-  -- This function is run last and is a good place to configuring
-  -- augroups/autocommands and custom filetypes also this just pure lua so
-  -- anything that doesn't fit in the normal config locations above can go here
-  polish = function()
-    -- Set up custom filetypes
-    -- vim.filetype.add {
-    --   extension = {
-    --     foo = "fooscript",
-    --   },
-    --   filename = {
-    --     ["Foofile"] = "fooscript",
-    --   },
-    --   pattern = {
-    --     ["~/%.config/foo/.*"] = "fooscript",
-    --   },
-    -- }
-  end,
+	["which-key"] = {
+		register = {
+			n = {
+				["<leader>"] = {
+					["b"] = { name = "Buffer" },
+				},
+			},
+		},
+	},
 }
 
 return config
